@@ -1,5 +1,5 @@
 
-// ------------let------------
+// ------------let-------------
 //1 • Créer une variable favoriteCityId (à l’aide mot clé let) qui contient la chaîne de caractères : "rome".
 let favoriteCityId = "rome";
 
