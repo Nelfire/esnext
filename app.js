@@ -158,11 +158,33 @@ class TripService {
             setTimeout( () => {
                 // ici l'exécution du code est asynchrone
                 // TODO utiliser resolve et reject en fonction du résultat de la recherche
+                let tripTrouve;
+                for (const trip of this.setTrip) {
+                    if (trip.name === tripName) {
+                        tripTrouve = trip;
+                        break;
+                    }
+                }
+
+                if(tripTrouve) {
+                    resolve(tripTrouve)
+                } else {
+                    reject(`No trip found with name = ${tripName}`)
+                }
 
             }, 2000)
         });
     }
 }
+
+const tripServ = new TripService();
+tripServ.findByName('Nantes')
+    .then(tripTrouve => console.log('Trip found ', tripTrouve))
+    .catch(err => console.log(err))
+
+
+
+
 class PriceService {
     constructor() {
         // TODO Map of 2 trips
@@ -177,9 +199,30 @@ class PriceService {
     findPriceByTripId(tripId) {
         return new Promise((resolve, reject) => {
             setTimeout( () => {
-            // ici l'exécution du code est asynchrone
-            // TODO utiliser resolve et reject en fonction du résultat de la recherche
+                const price = this.map.get(tripId);
+
+                if(price) {
+                    resolve(price);
+                } else {
+                    reject(`No price found with trip id = ${tripId}`)
+                }
             }, 2000)
         });
     }
 }
+
+const priceServ = new PriceService()
+
+priceServ.findPriceByTripId('paris')
+    .then(price => console.log('Price found', price))
+    .catch(err => console.log(err))
+
+const tripName = 'XXX';
+
+// Name => Trip => Id Trip => Price
+
+tripServ.findByName(tripName)
+    .then(trip => trip.id)
+    .then(tripId => priceServ.findPriceByTripId(tripId)) // flatMap
+    .then(price => console.log('Price found', price))
+    .catch(err => console.log(err))
